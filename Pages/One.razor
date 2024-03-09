@@ -1,0 +1,37 @@
+﻿@page "/one"
+
+<PageTitle>TodoList</PageTitle>
+
+<h1>รายการสิ่งที่ต้องทำ (@ones.Count(one => !one.IsDone))</h1>
+
+<ul>
+    @foreach (var one in ones) //วนลูป รายการ one ที่โดนกรอกเข้ามา
+    {
+        <li>
+            <input type="checkbox" @bind="one.IsDone"/> 
+            <input @bind="one.Title" />
+            <button @onclick="() => RemoveTodo(one)">ลบรายการ</button>
+        </li> //แสดงรายการ one ที่โดนเพิ่มเข้ามาพร้อมกล่อง Checkbox แต่ถ้ากดลบรายการออก รายการ one ที่เลือกจะถูกลบออกไป
+    }
+</ul>
+
+<input placeholder="กรอกรายการที่นี้" @bind="newTodo"/>
+<button @onclick="AddTodo">เพิ่มรายการ</button>
+
+@code {
+    private List<TodoItem> ones = new(); //โลจิก ของ todo oneรายการใหม่ ที่เพิ่มเข้ามา เป็นการวนลูปตามที่กรอกไปเรื่อยๆ โลจิกบรรทัดนี้ส่งไปที่ ones บรรทัด8
+    private string? newTodo; //โลจิกประกาศตัวแปร ข้อความที่เป็นค่าว่าง newtodo ช่องให้กรอกบรรทัดที่ 18
+
+    private void AddTodo()          //โลจิก AddTodo แสดงรายการที่เพิ่มออกมาบนหน้าจอ และรายการที่เพิ่มเข้ามาใหม่ เท่ากับ stringที่เป็นค่าว่าง บรรทัด 20
+    {
+        if (!string.IsNullOrWhiteSpace(newTodo))
+        {
+            ones.Add(new TodoItem {Title = newTodo});
+            newTodo = string.Empty;
+        }
+    }
+    private void RemoveTodo(TodoItem one) //โลจิกลบรายการออกเมื่อกดปุ่ม บรรทัดที่ 13
+    {
+        ones.Remove(one);
+    }
+}
